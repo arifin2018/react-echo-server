@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import Card from '../../Components/card'
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
+import axios from 'axios';
 
 
 function RegisterForm() {
@@ -24,33 +25,38 @@ function RegisterForm() {
     }
 
     function axiosPost(params) {
-        // console.log(({ message }) => <h1>{message}</h1>);
-        return ({message}) => console.log(message.message);
+        try {
+            axios.post('api/register',{
+                name:params.name,
+                email:params.email,
+                password:params.password,
+            }).then(
+                response=>{
+                    console.log(response);
+                }
+            )
+        } catch (error) {
+            console.log(error);
+        }
     }
-    useEffect(()=>{
-        console.log(register.formState.errors.name);
-    })
 
     return (
         <form method="post" className="space-y-3 p-3" onSubmit={register.handleSubmit(axiosPost)}>
             <div>
                 <span className="block">Name :</span>
                 <input type="text" {...register.register("name", {required:"This is required name."})} id="name" className="w-full border-spacing-0 border-0 bg-slate-300 rounded-md p-1 focus:outline-1 focus:outline-gray-400" />
-                <ErrorMessage errors={register.formState.errors} name='singleErrorInput'>  </ErrorMessage>
-                <ErrorMessage
-                    errors={register?.formState?.errors}
-                    name="singleErrorInput"
-                    render={({ message }) => <p>{message.message}</p>}
-                />
+                <span className='text-sm text-red-500'>{register.formState.errors.name?.message}</span>
             </div>
             <div>
                 <span className="block">Email :</span>
                 <input type="text" {...register.register("email", {required:"This is required."})} id="email" className="w-full border-spacing-0 border-0 bg-slate-300 rounded-md p-1 focus:outline-1 focus:outline-gray-400" />
+                <span className='text-sm text-red-500'>{register.formState.errors.email?.message}</span>
             </div>
             <div>
                 <span className="block">Password :</span>
                 <div className='relative'>
                     <input type="password" {...register.register("password", {required:"This is required."})} onChange={onChangePassword} id="password" className="w-full border-spacing-0 border-0 bg-slate-300 rounded-md p-1 focus:outline-1 focus:outline-gray-400 relative" ref={passwordInput}/>
+                    <span className='text-sm text-red-500'>{register.formState.errors.password?.message}</span>
                     <button type="button" className='absolute right-1 py-1' onClick={showHide}>
                         {
                             password === true ? 

@@ -1,15 +1,19 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Card from '../../Components/card'
 import { useForm } from 'react-hook-form';
-
+import axios from 'axios';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { dataUser } from '../../State/Recoil';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 
 function LoginForm() {
     const passwordInput = useRef(false)
     const [password, setPassword] = useState(true);
-    // const { register, handleSubmit } = useForm();
     const register = useForm();
-    // const [inputPassword, setInputPassword] = useState();
+    const setDataUser = useSetRecoilState(dataUser)
+    const getDataUser = useRecoilValue(dataUser)
+    let history = useNavigate();
 
     function showHide(e) {
 
@@ -27,10 +31,25 @@ function LoginForm() {
         return register.setValue("password", e.target.value)
     }
 
-
     function axiosPost(params) {
-        console.log(params);
+        try {
+            axios.post('api/login',{
+                email:params.email,
+                password:params.password,
+            }).then(
+                response=>{
+                    setDataUser({token:response.data.access_token});
+                    history('/',{replace: true})
+                },
+            )
+        } catch (error) {
+            console.log(error);
+        }
     }
+
+    useEffect(()=>{
+        console.log("getDataUser => "+JSON.stringify(getDataUser.token));
+    })
 
     return (
         <form method="post" className="space-y-3 p-3" onSubmit={register.handleSubmit(axiosPost)}>
@@ -56,7 +75,6 @@ function LoginForm() {
         </form>
     )
 };
-
 
 function Login() {
     return <>

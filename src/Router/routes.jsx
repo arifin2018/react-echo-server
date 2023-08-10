@@ -4,6 +4,7 @@ import Login from "../Pages/Auth/login";
 import Register from "../Pages/Auth/register";
 import Navbar from "../Components/navbar";
 import Chat from "../Pages/Chat";
+import { ProtectRoute } from "./ProtectRoute";
 
 export default function routes() {
     return(
@@ -31,9 +32,9 @@ export default function routes() {
                 </>
                 }/>
                 <Route path="/chat" element={
-                <>
+                <ProtectRoute>
                     <Chat></Chat>
-                </>
+                </ProtectRoute>
                 }/>
             </Routes>
         </Router>
