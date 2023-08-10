@@ -3,6 +3,7 @@ import Card from '../../Components/card'
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { login } from '../../Api/auth';
 
 
 function LoginForm() {
@@ -27,19 +28,21 @@ function LoginForm() {
         return register.setValue("password", e.target.value)
     }
 
-    function axiosPost(params) {
-        try {
-            axios.post('api/login',{
-                email:params.email,
-                password:params.password,
-            }).then(
-                response=>{
-                    history('/',{replace: true})
-                },
-            )
-        } catch (error) {
-            console.log(error);
-        }
+    async function axiosPost(params) {
+        const response = await login(params)
+        console.log("RESPONSE LOGIN___", response)
+        // try {
+        //     axios.post('api/login',{
+        //         email:params.email,
+        //         password:params.password,
+        //     }).then(
+        //         response=>{
+        //             history('/',{replace: true})
+        //         },
+        //     )
+        // } catch (error) {
+        //     console.log(error);
+        // }
     }
 
     useEffect(()=>{
