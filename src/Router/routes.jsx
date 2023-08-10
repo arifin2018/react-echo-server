@@ -5,6 +5,8 @@ import Register from "../Pages/Auth/register";
 import Navbar from "../Components/navbar";
 import Chat from "../Pages/Chat";
 import { ProtectRoute } from "./ProtectRoute";
+import Context from "../Pages/Context";
+import Context2 from "../Pages/Context2";
 
 export default function routes() {
     return(
@@ -31,6 +33,20 @@ export default function routes() {
                     </Navbar>
                 </>
                 }/>
+                <Route
+                path="/tesContext" element={
+                    <>
+                        <Context></Context>
+                    </>
+                    }
+                />
+                <Route
+                path="/tesContext2" element={
+                    <>
+                        <Context2></Context2>
+                    </>
+                    }
+                />
                 <Route path="/chat" element={
                 <ProtectRoute>
                     <Chat></Chat>
