@@ -2,17 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import Card from '../../Components/card'
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { dataUser } from '../../State/Recoil';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 function LoginForm() {
     const passwordInput = useRef(false)
     const [password, setPassword] = useState(true);
     const register = useForm();
-    const setDataUser = useSetRecoilState(dataUser)
-    const getDataUser = useRecoilValue(dataUser)
     let history = useNavigate();
 
     function showHide(e) {
@@ -38,7 +34,6 @@ function LoginForm() {
                 password:params.password,
             }).then(
                 response=>{
-                    setDataUser({token:response.data.access_token});
                     history('/',{replace: true})
                 },
             )
@@ -48,7 +43,6 @@ function LoginForm() {
     }
 
     useEffect(()=>{
-        console.log("getDataUser => "+JSON.stringify(getDataUser.token));
     })
 
     return (
