@@ -7,5 +7,6 @@ export const login = async (data) => {
     data,
   })
 
+  localStorage.setItem('access_token', response.accessToken);
   return response;
 }

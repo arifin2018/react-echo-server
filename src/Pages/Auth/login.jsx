@@ -27,10 +27,10 @@ function LoginForm() {
     function onChangePassword(e) {
         return register.setValue("password", e.target.value)
     }
-
     async function axiosPost(params) {
         const response = await login(params)
         console.log("RESPONSE LOGIN___", response)
+        history('/test-context')
         // try {
         //     axios.post('api/login',{
         //         email:params.email,
