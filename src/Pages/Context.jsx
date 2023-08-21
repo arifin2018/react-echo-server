@@ -1,35 +1,13 @@
-import { createContext, useContext } from "react";
-
-const ThemeContext = createContext();
-
-const ThemeA = ({ theme, children }) => {
-    // const theme = 'black'; // You can replace this with dynamic data
-    return (
-      <ThemeContext.Provider value={theme}>
-        {children}
-      </ThemeContext.Provider>
-    );
-  };
-
-const ThemedButton = () => {
-  const theme = useContext(ThemeContext);
-
-  return (
-    <button style={{ background: theme === 'light' ? 'white' : 'black', color: theme === 'light' ? 'black' : 'white' }}>
-      Themed Button
-    </button>
-  );
-};
-
-const App = () => {
-    return (
-      <ThemeA theme="light">
-        <div>
-          <h1>Using createContext and useContext with Children in React</h1>
-          <ThemedButton />
-        </div>
-      </ThemeA>
-    );
-  };
+export default function Context(params) {
   
-  export default App;
+  function screenRight() {
+    return <h1>Arifin</h1>
+  }
+  
+  return (
+    <div className="flex justify-between w-full h-full">
+      <h1 className="basis-2/5 border-r-2 border-black text-right">Nur</h1>
+      <h1 className="basis-3/5 h-screen">{screenRight}</h1>
+    </div>
+  )
+}

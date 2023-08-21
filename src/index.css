@@ -32,3 +32,9 @@ img {
   max-width: 100%;
   height: auto;
 }
+
+.expand{
+  background-color: cadetblue;
+  height: 200px;
+  transition: all 3s ease-in-out;
+}

@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Card from '../../Components/card'
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { login } from '../../Api/auth';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { LoginAPI } from '../../Api/auth';
+import { getCookie } from '../../Helpers/Cookie';
 
 
 function LoginForm() {
@@ -28,21 +28,9 @@ function LoginForm() {
         return register.setValue("password", e.target.value)
     }
     async function axiosPost(params) {
-        const response = await login(params)
+        const response = await LoginAPI(params)
         console.log("RESPONSE LOGIN___", response)
-        history('/test-context')
-        // try {
-        //     axios.post('api/login',{
-        //         email:params.email,
-        //         password:params.password,
-        //     }).then(
-        //         response=>{
-        //             history('/',{replace: true})
-        //         },
-        //     )
-        // } catch (error) {
-        //     console.log(error);
-        // }
+        history('/context')
     }
 
     useEffect(()=>{
@@ -52,7 +40,7 @@ function LoginForm() {
         <form method="post" className="space-y-3 p-3" onSubmit={register.handleSubmit(axiosPost)}>
             <div>
                 <span className="block">Email :</span>
-                <input type="text" {...register.register("email", {require:true})} id="email" className="w-full border-spacing-0 border-0 bg-slate-300 rounded-md p-1 focus:outline-1 focus:outline-gray-400" />
+                <input type="text" {...register.register("email", {require:true})} value="arifingdr@gmail.com" id="email" className="w-full border-spacing-0 border-0 bg-slate-300 rounded-md p-1 focus:outline-1 focus:outline-gray-400" />
             </div>
             <div>
                 <span className="block">Password :</span>

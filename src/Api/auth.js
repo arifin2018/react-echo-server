@@ -1,12 +1,15 @@
 import API from ".";
 
-export const login = async (data) => {
+export const LoginAPI = async (data) => {
   const response = await API({
-    path: '/auth/create-user',
+    path: '/login',
     method: 'POST',
     data,
   })
 
-  localStorage.setItem('access_token', response.accessToken);
+  var now = new Date();
+  now.setSeconds(now.getSeconds() + response.expires_in); // timestamp
+  now = new Date(now); // Date object
+  document.cookie = `access_token=${response.access_token};expires=${now};path=/;`;
   return response;
 }

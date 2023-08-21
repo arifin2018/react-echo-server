@@ -2,7 +2,7 @@ function Chat() {
     return (
         <div className="flex w-full h-screen">
             <div className="border-r-2 w-3/12 h-full py-16 text-right">
-                <div className="flex flex-col px-3 h-5/6 overflow-y-auto border-b-red-100 border-b-2 space-y-2">
+                <div className="flex flex-col px-3 h-5/6 overflow-y-auto border-b-slate-300 border-b-2 space-y-2">
                     <h1 className="cursor-pointer">hai</h1>
                 </div>
                 <div className="w-full flex justify-end">
@@ -15,48 +15,29 @@ function Chat() {
                 </div>
             </div>
             <div className="w-9/12 h-full">
-                <h1 className="p-3 border-b-4 min-h-[7%] font-medium ">hai2</h1>
-                <div className="px-3 py-3 h-[86%] overflow-y-auto">
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                    <h1>hai2</h1>
-                </div>
-                <input type="text" name="" id="" className="bottom-0 h-[7%] p-2 w-full border-t-gray-300 border-t-2" placeholder="Write message..."/>
+                <RightScreen/>
             </div>
         </div>
     )
+}
+
+function RightScreen(params) {
+    return <>
+            <h1 className="p-3 border-b-4 min-h-[7%] font-medium ">hai2</h1>
+                <div className="px-3 py-3 h-[86%] overflow-y-auto space-y-4">
+                    <span className="flex justify-start">
+                        <p className=" bg-gray-200 px-2 py-1 rounded">
+                            hai2
+                        </p>
+                    </span>
+                    <span className="flex justify-end">
+                        <p className=" bg-slate-400 px-2 py-1 rounded">
+                            hai2
+                        </p>
+                    </span>
+                </div>
+            <input type="text" name="" id="" className="bottom-0 h-[7%] p-2 w-full border-t-gray-300 border-t-2" placeholder="Write message..."/>
+    </>
 }
 
 export default Chat;
