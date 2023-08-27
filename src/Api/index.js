@@ -3,7 +3,7 @@ import API_URL from '../Constant/api-url'
 
 const API = async (props) => {
   const {
-    path, method, params, data,
+    path, method, params, data,token
   } = props
   const timeout = 15e3
   // const token = localStorage.getItem('token')
@@ -16,6 +16,7 @@ const API = async (props) => {
     data,
     headers: {
       Accept: 'application/json',
+      Authorization: `Bearer ${token}`,
     },
   }
   const response = await axios(config)
