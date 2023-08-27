@@ -1,5 +1,6 @@
 import { Navigate, Route, BrowserRouter as Router,Routes } from "react-router-dom";
 import PrivateRoute from "./private-route";
+import ChatRoom from './ChatRoom'
 import Home from "../Pages/home";
 import Login from "../Pages/Auth/login";
 import Register from "../Pages/Auth/register";
@@ -49,7 +50,9 @@ export default function routes() {
                 <Route
                     path='/' element={<PrivateRoute />}
                 >
-                    <Route path='context' element={<Chat />} />
+                    <Route path='/context' element={<Chat/>} >
+                        <Route path=':id' element={<ChatRoom/>} />
+                    </Route>
                 </Route>
             </Routes>
         </Router>

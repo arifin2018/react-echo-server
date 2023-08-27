@@ -28,8 +28,7 @@ function LoginForm() {
         return register.setValue("password", e.target.value)
     }
     async function axiosPost(params) {
-        const response = await LoginAPI(params)
-        console.log("RESPONSE LOGIN___", response)
+        await LoginAPI(params)
         history('/context')
     }
 
