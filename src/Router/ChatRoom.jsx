@@ -8,12 +8,15 @@ import Pusher from 'pusher-js';
 export default function ChatRoom(params) {
 
     const [messages, setMessages] = useState([]);
-    const {register, handleSubmit} = useForm({});
+    const [userChat, setUserChat] = useState([]);
+    const {register, handleSubmit, reset} = useForm({});
     const messageEnd = useRef(null);
+    const {id} = useParams();
+
 
     async function sendChat(data) {
         await API({
-            path: '/chat/1',
+            path: `/chat/${id}`,
             method: 'POST',
             data,
             token: getCookie('access_token')
@@ -28,6 +31,27 @@ export default function ChatRoom(params) {
                 });
             }
         })
+        reset()
+    }
+
+    async function getChat(data) {
+        let response = await API({
+            path: `/chat/${id}`,
+            method: 'GET',
+            token: getCookie('access_token')
+        }).catch(function (e) {
+            if (e.response?.status !== 200) {
+                const cookies = document.cookie.split(";");
+                cookies.forEach(cookie => {
+                    const eqPos = cookie.indexOf("=");
+                    const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+                    document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                    window.location.reload()
+                });
+            }
+        })
+        setMessages(response.message);
+        setUserChat(response.user);
     }
 
     useEffect(()=>{
@@ -39,6 +63,7 @@ export default function ChatRoom(params) {
         channel.bind('server.sendMessage', data => {
             setMessages((old) => [...old,data.dataMessage]);
         });
+        getChat()
     },[])
 
     function scrollToBottom() {
@@ -50,10 +75,15 @@ export default function ChatRoom(params) {
 
     useEffect(()=>{
         scrollToBottom()
+        // const data = async () => {
+        //     const response = await getChat()
+        //     console.log("RESULT", response)
+        // }
+        // data()
     },[messages])
 
     return <>
-            <h1 className="p-3 border-b-4 min-h-[7%] font-medium ">{JSON.parse(getCookie('user')).name}</h1>
+            <h1 className="p-3 border-b-4 min-h-[7%] font-medium ">{userChat.name}</h1>
             <div className="px-3 py-3 h-[86%] overflow-y-auto space-y-4" ref={messageEnd}>
                 {
                     messages?.map((message, i) => {

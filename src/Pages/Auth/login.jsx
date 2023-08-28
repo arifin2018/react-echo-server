@@ -39,7 +39,7 @@ function LoginForm() {
         <form method="post" className="space-y-3 p-3" onSubmit={register.handleSubmit(axiosPost)}>
             <div>
                 <span className="block">Email :</span>
-                <input type="text" {...register.register("email", {require:true})} value="arifingdr@gmail.com" id="email" className="w-full border-spacing-0 border-0 bg-slate-300 rounded-md p-1 focus:outline-1 focus:outline-gray-400" />
+                <input type="text" {...register.register("email", {require:true})} id="email" className="w-full border-spacing-0 border-0 bg-slate-300 rounded-md p-1 focus:outline-1 focus:outline-gray-400" />
             </div>
             <div>
                 <span className="block">Password :</span>
