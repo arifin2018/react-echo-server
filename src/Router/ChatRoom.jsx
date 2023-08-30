@@ -47,19 +47,25 @@ export default function ChatRoom(params) {
         // Pusher.logToConsole = true;
         var channel = new Pusher('72c7cc74868f610f8163', {
             cluster: 'mt1',
-            forceTLS: true
-        }).subscribe('messageChat');
-        channel.bind('server.sendMessage', data => {
+            forceTLS: true,
+            encrypted: true,
+            authEndpoint:"http://localhost:8012/api/broadcasting/auth",
+            auth: {
+                headers: {
+                    Authorization: `Bearer ${getCookie('access_token')}`,
+                    Accept: 'application/json',
+                },
+            },
+        // }).subscribe(`private-messageChat-${userChat.id}`);
+        }).subscribe(`private-messageChat-1`);
+        channel.bind('private.sendMessage', (data,error) => {
+            console.log(error);
             setMessages((old) => [...old,data.dataMessage]);
         });
     },[])
 
     useEffect(()=>{
         getChat()
-        // const cookies = new Cookies(null, { 
-        //     path: '/',
-        // });
-        // console.log(cookies.getAll());
         // eslint-disable-next-line
     },[id])
 
