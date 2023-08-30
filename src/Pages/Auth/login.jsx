@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Card from '../../Components/card'
 import { useForm } from 'react-hook-form';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { LoginAPI } from '../../Api/auth';
-import { getCookie } from '../../Helpers/Cookie';
 
 
 function LoginForm() {

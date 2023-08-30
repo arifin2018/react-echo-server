@@ -5,8 +5,6 @@ import Home from "../Pages/home";
 import Login from "../Pages/Auth/login";
 import Register from "../Pages/Auth/register";
 import Navbar from "../Components/navbar";
-import Context from "../Pages/Context";
-import Context2 from "../Pages/Context2";
 import { getCookie } from "../Helpers/Cookie";
 import Chat from "../Pages/Chat";
 

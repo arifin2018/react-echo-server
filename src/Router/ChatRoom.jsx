@@ -2,17 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import API from "../Api";
-import { getCookie } from "../Helpers/Cookie";
+import { DeleteAll, getCookie } from "../Helpers/Cookie";
 import Pusher from 'pusher-js';
+import Cookies from "universal-cookie";
 
 export default function ChatRoom(params) {
-
     const [messages, setMessages] = useState([]);
     const [userChat, setUserChat] = useState([]);
     const {register, handleSubmit, reset} = useForm({});
     const messageEnd = useRef(null);
     const {id} = useParams();
-
 
     async function sendChat(data) {
         await API({
@@ -22,13 +21,8 @@ export default function ChatRoom(params) {
             token: getCookie('access_token')
         }).catch(function (e) {
             if (e.response?.status !== 200) {
-                const cookies = document.cookie.split(";");
-                cookies.forEach(cookie => {
-                    const eqPos = cookie.indexOf("=");
-                    const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-                    document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-                    window.location.reload()
-                });
+                DeleteAll()
+                window.location.reload()
             }
         })
         reset()
@@ -41,13 +35,8 @@ export default function ChatRoom(params) {
             token: getCookie('access_token')
         }).catch(function (e) {
             if (e.response?.status !== 200) {
-                const cookies = document.cookie.split(";");
-                cookies.forEach(cookie => {
-                    const eqPos = cookie.indexOf("=");
-                    const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-                    document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-                    window.location.reload()
-                });
+                DeleteAll()
+                window.location.reload()
             }
         })
         setMessages(response.message);
@@ -63,8 +52,16 @@ export default function ChatRoom(params) {
         channel.bind('server.sendMessage', data => {
             setMessages((old) => [...old,data.dataMessage]);
         });
-        getChat()
     },[])
+
+    useEffect(()=>{
+        getChat()
+        // const cookies = new Cookies(null, { 
+        //     path: '/',
+        // });
+        // console.log(cookies.getAll());
+        // eslint-disable-next-line
+    },[id])
 
     function scrollToBottom() {
         messageEnd.current?.scrollTo({
@@ -81,11 +78,11 @@ export default function ChatRoom(params) {
         // }
         // data()
     },[messages])
-
     return <>
-            <h1 className="p-3 border-b-4 min-h-[7%] font-medium ">{userChat.name}</h1>
-            <div className="px-3 py-3 h-[86%] overflow-y-auto space-y-4" ref={messageEnd}>
-                {
+        <h1 className="p-3 border-b-4 min-h-[7%] font-medium ">{userChat.name}</h1>
+        <div className="px-3 py-3 h-[86%] overflow-y-auto space-y-4" ref={messageEnd}>
+            {
+                messages.length > 0 ?
                     messages?.map((message, i) => {
                         return message?.sender_id === JSON.parse(getCookie('user')).id ?
                             <span className="flex justify-end" key={i}>
@@ -99,11 +96,13 @@ export default function ChatRoom(params) {
                                     {message?.message}
                                 </p>
                             </span>
-                    })
-                }
-            </div>
-            <form onSubmit={handleSubmit(sendChat)} method="post" className="h-[6%]">
-                <input type="text" {...register("message", { required: "Please enter your chat." })} className="bottom-0 h-[7%] py-6 px-3 w-full border-t-gray-300 border-t-2 outline-0 focus:border-t-2 focus:border-l-2 focus:border-gray-800 focus:h-full" placeholder="Write message..."/>
-            </form>
+                    }) 
+                :
+                <h1 className="flex justify-center items-center h-full">Doesn't have chat anything, let's chat with {userChat.name}</h1>
+            }
+        </div>
+        <form onSubmit={handleSubmit(sendChat)} method="post" className="h-[6%]">
+            <input type="text" {...register("message", { required: "Please enter your chat." })} className="bottom-0 h-[7%] py-6 px-3 w-full border-t-gray-300 border-t-2 outline-0 focus:border-t-2 focus:border-l-2 focus:border-gray-800 focus:h-full" placeholder="Write message..."/>
+        </form>
     </>
 };

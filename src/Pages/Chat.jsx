@@ -1,7 +1,7 @@
 import API from "../Api";
-import { getCookie } from "../Helpers/Cookie";
-import { useEffect, useRef, useState} from "react";
-import { Link, Outlet, useParams } from "react-router-dom";
+import { DeleteAll, getCookie } from "../Helpers/Cookie";
+import { useEffect, useState} from "react";
+import { NavLink, Outlet, useParams } from "react-router-dom";
 // import Pusher from 'pusher-js/with-encryption';
 
 function Chat() {
@@ -14,18 +14,13 @@ function Chat() {
             token: getCookie('access_token')
         })
         .then((data)=>{
+            console.log(data);
             setUsers(data.user)
         })
         .catch(function (e) {
             if (e.response?.status !== 200) {
-                const cookies = document.cookie.split(";");
-                cookies.forEach(cookie => {
-                    const eqPos = cookie.indexOf("=");
-                    const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-                    document.cookie = name + "=; expires=Thu, 01-Jan-1970 00:00:01 GMT;";
-                    console.log(document.cookie);
-                    // window.location.reload()
-                });
+                DeleteAll()
+                window.location.reload()
             }
         })
     }
@@ -41,7 +36,7 @@ function Chat() {
                     {
                         users?.map((user,i)=>{
                             return <h1 className="cursor-pointer" key={i}>
-                                <Link to={'/context/'+user.id}>{user.name}</Link>
+                                <NavLink to={'/context/'+user.id}>{user.name}</NavLink>
                             </h1>
                         })
                     }
@@ -66,15 +61,11 @@ function Chat() {
 function RightScreen(params) {
     const {id} = useParams();
     return (
-        <>
-        {
-            id ? 
-            <Outlet />
-            :
+        id ? 
+            <Outlet/>
+        :
             <h1 className="flex justify-center items-center h-full">Doesn't have chat anything, let's chat with everyone</h1>
-        }
-        </>
-    )
+    )    
 }
 
 export default Chat;
