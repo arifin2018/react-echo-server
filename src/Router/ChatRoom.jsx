@@ -49,7 +49,7 @@ export default function ChatRoom(params) {
             cluster: 'mt1',
             forceTLS: true,
             encrypted: true,
-            authEndpoint:"http://localhost:8012/api/broadcasting/auth",
+            authEndpoint:"https://backend.arifinportfolio.my.id/api/broadcasting/auth",
             auth: {
                 headers: {
                     Authorization: `Bearer ${getCookie('access_token')}`,
