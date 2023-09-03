@@ -4,11 +4,12 @@ import { useParams } from "react-router-dom";
 import API from "../Api";
 import { DeleteAll, getCookie } from "../Helpers/Cookie";
 import Pusher from 'pusher-js';
-import Cookies from "universal-cookie";
+import { useRecoilState } from "recoil";
+import { MessagesRecoil, UserChatRecoil } from "../Helpers/Recoil";
 
 export default function ChatRoom(params) {
-    const [messages, setMessages] = useState([]);
-    const [userChat, setUserChat] = useState([]);
+    const [messages, setMessages] = useRecoilState(MessagesRecoil);
+    const [userChat, setUserChat] = useRecoilState(UserChatRecoil);
     const {register, handleSubmit, reset} = useForm({});
     const messageEnd = useRef(null);
     const {id} = useParams();
@@ -26,6 +27,12 @@ export default function ChatRoom(params) {
             }
         })
         reset()
+        let datas = {
+            'sender_id':JSON.parse(getCookie('user')).id,
+            'receiver_id':id,
+            'message':data.message
+        }
+        setMessages((old) => [...old,datas]);
     }
 
     async function getChat(data) {
@@ -44,27 +51,6 @@ export default function ChatRoom(params) {
     }
 
     useEffect(()=>{
-        // Pusher.logToConsole = true;
-        var channel = new Pusher('72c7cc74868f610f8163', {
-            cluster: 'mt1',
-            forceTLS: true,
-            encrypted: true,
-            authEndpoint:"https://backend.arifinportfolio.my.id/api/broadcasting/auth",
-            auth: {
-                headers: {
-                    Authorization: `Bearer ${getCookie('access_token')}`,
-                    Accept: 'application/json',
-                },
-            },
-        // }).subscribe(`private-messageChat-${userChat.id}`);
-        }).subscribe(`private-messageChat-1`);
-        channel.bind('private.sendMessage', (data,error) => {
-            console.log(error);
-            setMessages((old) => [...old,data.dataMessage]);
-        });
-    },[])
-
-    useEffect(()=>{
         getChat()
         // eslint-disable-next-line
     },[id])
@@ -72,17 +58,12 @@ export default function ChatRoom(params) {
     function scrollToBottom() {
         messageEnd.current?.scrollTo({
             behavior: "smooth",
-            top: document.body.scrollHeight,
+            top: document.body.scrollHeight * 9999,
         })
     }
 
     useEffect(()=>{
         scrollToBottom()
-        // const data = async () => {
-        //     const response = await getChat()
-        //     console.log("RESULT", response)
-        // }
-        // data()
     },[messages])
     return <>
         <h1 className="p-3 border-b-4 min-h-[7%] font-medium ">{userChat.name}</h1>
