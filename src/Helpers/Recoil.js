@@ -10,4 +10,9 @@ const UserChatRecoil = atom({
     default:[]
 })
 
-export {MessagesRecoil, UserChatRecoil};
+const UserDataExist = atom({
+    key: 'UserDataExist',
+    default: [],
+})
+
+export {MessagesRecoil, UserChatRecoil, UserDataExist};

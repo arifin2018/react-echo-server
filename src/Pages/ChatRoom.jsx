@@ -1,14 +1,16 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import API from "../Api";
 import { DeleteAll, getCookie } from "../Helpers/Cookie";
 import { useRecoilState } from "recoil";
 import { MessagesRecoil, UserChatRecoil } from "../Helpers/Recoil";
+import DataAndLogout from "../Components/Users/dataAndLogout";
 
 export default function ChatRoom(params) {
     const [messages, setMessages] = useRecoilState(MessagesRecoil);
     const [userChat, setUserChat] = useRecoilState(UserChatRecoil);
+    const [buttonNavbar, setButtonNavbar] = useState(false);
     const {register, handleSubmit, reset} = useForm({});
     const messageEnd = useRef(null);
     const {id} = useParams();
@@ -65,7 +67,29 @@ export default function ChatRoom(params) {
         scrollToBottom()
     },[messages])
     return <>
-        <h1 className="p-3 border-b-4 min-h-[7%] font-medium ">{userChat.name}</h1>
+        <div>
+            <div className="flex justify-between relative border-b-4">
+                <h1 className="p-3 min-h-[7%] font-medium">{userChat.name}</h1>
+                <button className="block md:hidden relative" type="button" onClick={e => setButtonNavbar(!buttonNavbar)}>
+                    {
+                        buttonNavbar ? 
+                            <box-icon type='solid' name='chevron-up'></box-icon>
+                        :
+                        <>
+                            <box-icon type='solid' name='chevron-down'></box-icon>
+                        </>
+                    }
+                </button>
+            </div>
+            {
+                buttonNavbar ?
+                    <div className="absolute bg-slate-200 w-full">
+                        <DataAndLogout position="start"></DataAndLogout>
+                    </div>
+                :
+                    <div className="hidden"></div>
+            }
+        </div>
         <div className="px-3 py-3 h-[86%] overflow-y-auto space-y-4" ref={messageEnd}>
             {
                 messages.length > 0 ?

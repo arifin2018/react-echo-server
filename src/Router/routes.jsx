@@ -1,12 +1,12 @@
 import { Navigate, Route, BrowserRouter as Router,Routes } from "react-router-dom";
 import PrivateRoute from "./private-route";
-import ChatRoom from './ChatRoom'
 import Home from "../Pages/home";
 import Login from "../Pages/Auth/login";
 import Register from "../Pages/Auth/register";
 import Navbar from "../Components/navbar";
 import { getCookie } from "../Helpers/Cookie";
 import Chat from "../Pages/Chat";
+import ChatRoom from "../Pages/ChatRoom";
 
 export default function routes() {
     return(
