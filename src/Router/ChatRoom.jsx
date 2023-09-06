@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import API from "../Api";
 import { DeleteAll, getCookie } from "../Helpers/Cookie";
-import Pusher from 'pusher-js';
 import { useRecoilState } from "recoil";
 import { MessagesRecoil, UserChatRecoil } from "../Helpers/Recoil";
 

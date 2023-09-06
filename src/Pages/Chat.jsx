@@ -6,6 +6,7 @@ import { NavLink, Outlet, useParams } from "react-router-dom";
 
 function Chat() {
     const [users, setUsers] = useState([]);
+    const [me, setMe] = useState([]);
 
     async function user() {
         await API({
@@ -14,7 +15,6 @@ function Chat() {
             token: getCookie('access_token')
         })
         .then((data)=>{
-            console.log(data);
             setUsers(data.user)
         })
         .catch(function (e) {
@@ -26,6 +26,7 @@ function Chat() {
     }
 
     useEffect(() => {
+        setMe(JSON.parse(getCookie('user')))
         user()
     }, []);
 
@@ -43,9 +44,11 @@ function Chat() {
                 </div>
                 <div className="w-full flex justify-end">
                     <div className="bg-slate-300 p-4 rounded-lg flex flex-col w-3/4 space-y-3">
-                        <span>Arifin</span>
+                        <span>{me.name ?? ''}</span>
                         <div className="flex justify-end">
-                            <button type="submit" className="border bg-white rounded-md w-1/3">Logout</button>
+                            <form action="" method="post">
+                                <button type="submit" className="border bg-white rounded-md w-1/3">Logout</button>
+                            </form>
                         </div>
                     </div>
                 </div>
