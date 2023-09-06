@@ -23,7 +23,7 @@ const DataAndLogout = function(params) {
                         })
                     }
                 </div>
-                <div className={`w-full flex justify-${params?.position}`}>
+                <div className={`justify-start md:justify-end w-full flex`}>
                     <div className="w-full md:w-3/4 bg-slate-300 p-4 rounded-lg flex flex-col space-y-3">
                         <span>{me.name ?? ''}</span>
                         <div className={`flex justify-end`}>

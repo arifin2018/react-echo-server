@@ -84,7 +84,7 @@ export default function ChatRoom(params) {
             {
                 buttonNavbar ?
                     <div className="absolute bg-slate-200 w-full">
-                        <DataAndLogout position="start"></DataAndLogout>
+                        <DataAndLogout></DataAndLogout>
                     </div>
                 :
                     <div className="hidden"></div>
