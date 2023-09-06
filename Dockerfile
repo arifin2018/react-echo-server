@@ -11,8 +11,7 @@ COPY package-lock.json /app/package-lock.json
 RUN npm install
 
 COPY . /app
-# ENV PORT=3004
-# EXPOSE 3004
+EXPOSE 3002
 
 CMD [ "npm", "start" ]
 

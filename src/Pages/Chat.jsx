@@ -46,8 +46,8 @@ function Chat() {
                     <div className="bg-slate-300 p-4 rounded-lg flex flex-col w-3/4 space-y-3">
                         <span>{me.name ?? ''}</span>
                         <div className="flex justify-end">
-                            <form action="" method="post">
-                                <button type="submit" className="border bg-white rounded-md w-1/3">Logout</button>
+                            <form action="" method="post" className="w-full">
+                                <button type="submit" className="border bg-white rounded-md w-2/5">Logout</button>
                             </form>
                         </div>
                     </div>

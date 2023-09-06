@@ -6,8 +6,7 @@ services:
       context: .
     container_name: frontend
     ports:
-      - "1233:3000"
-      - "1234:3002"
+      - "3002:3002"
     volumes:
       - ./src:/app/src
     environment:
