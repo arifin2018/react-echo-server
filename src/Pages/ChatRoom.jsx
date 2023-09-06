@@ -10,7 +10,6 @@ import DataAndLogout from "../Components/Users/dataAndLogout";
 export default function ChatRoom(params) {
     const [messages, setMessages] = useRecoilState(MessagesRecoil);
     const [userChat, setUserChat] = useRecoilState(UserChatRecoil);
-    const [buttonNavbar, setButtonNavbar] = useState(false);
     const {register, handleSubmit, reset} = useForm({});
     const messageEnd = useRef(null);
     const {id} = useParams();
@@ -67,29 +66,7 @@ export default function ChatRoom(params) {
         scrollToBottom()
     },[messages])
     return <>
-        <div>
-            <div className="flex justify-between relative border-b-4">
-                <h1 className="p-3 min-h-[7%] font-medium">{userChat.name}</h1>
-                <button className="block md:hidden relative" type="button" onClick={e => setButtonNavbar(!buttonNavbar)}>
-                    {
-                        buttonNavbar ? 
-                            <box-icon type='solid' name='chevron-up'></box-icon>
-                        :
-                        <>
-                            <box-icon type='solid' name='chevron-down'></box-icon>
-                        </>
-                    }
-                </button>
-            </div>
-            {
-                buttonNavbar ?
-                    <div className="absolute bg-slate-200 w-full">
-                        <DataAndLogout></DataAndLogout>
-                    </div>
-                :
-                    <div className="hidden"></div>
-            }
-        </div>
+        
         <div className="px-3 py-3 h-[86%] overflow-y-auto space-y-4" ref={messageEnd}>
             {
                 messages.length > 0 ?
