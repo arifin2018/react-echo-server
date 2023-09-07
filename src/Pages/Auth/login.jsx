@@ -4,9 +4,11 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { LoginAPI } from '../../Api/auth';
 import { ErrorMessage } from '@hookform/error-message';
+import PacmanLoader from "react-spinners/PacmanLoader";
 
 
 function LoginForm() {
+    const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState('password');
     const [api, setApi] = useState('');
     const {
@@ -31,7 +33,7 @@ function LoginForm() {
 
     async function axiosPost(params,e) {
         e.preventDefault();
-        console.log('a');
+        setLoading(true)
         try {
             await LoginAPI(params)
             history('/context')
@@ -39,6 +41,8 @@ function LoginForm() {
         } catch (error) {
             setApi(error?.response?.data?.error)
             return false
+        }finally{
+            setLoading(false)
         }
     }
 
@@ -61,11 +65,6 @@ function LoginForm() {
                 <span className="block">Password :</span>
                 <div className='relative'>
                     <input type={password} {...register("password", { required: "This is required." })} id="password" className="w-full border-spacing-0 border-0 bg-slate-300 rounded-md p-1 focus:outline-1 focus:outline-gray-400 relative"/>
-                    <ErrorMessage
-                        errors={errors}
-                        name="password"
-                        render={({ message }) => <p className="text-red-600">{message}</p>}
-                    />
                     <button type="button" className='absolute right-1 py-1' onClick={showHide}>
                         {
                             password === 'text' ? 
@@ -74,9 +73,21 @@ function LoginForm() {
                             <box-icon name='show'></box-icon>
                         }
                     </button>
+                    <ErrorMessage
+                        errors={errors}
+                        name="password"
+                        render={({ message }) => <p className="text-red-600">{message}</p>}
+                    />
                 </div>
             </div>
-            <button type="submit" className='bg-cyan-600 p-1 rounded-md flex justify-end items-end end-0'>Submit</button>
+            <div className="flex justify-between flex-row-reverse">
+                <button type="submit" className='bg-cyan-600 p-1 rounded-md flex justify-self-end items-end end-0 h-full'>Submit</button>
+                <PacmanLoader
+                    color="#94d636"
+                    loading={loading}
+                    size={16}
+                />
+            </div>
         </form>
     )
 };
