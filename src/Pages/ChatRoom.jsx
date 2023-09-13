@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import API from "../Api";
 import { DeleteAll, getCookie } from "../Helpers/Cookie";
 import { useRecoilState } from "recoil";
 import { MessagesRecoil, UserChatRecoil } from "../Helpers/Recoil";
-import DataAndLogout from "../Components/Users/dataAndLogout";
 
 export default function ChatRoom(params) {
     const [messages, setMessages] = useRecoilState(MessagesRecoil);
@@ -66,8 +65,7 @@ export default function ChatRoom(params) {
         scrollToBottom()
     },[messages])
     return <>
-        
-        <div className="px-3 py-3 h-[84%] overflow-y-auto space-y-4" ref={messageEnd}>
+        <div className="px-3 py-3 h-[86%] overflow-y-auto space-y-4" ref={messageEnd}>
             {
                 messages.length > 0 ?
                     messages?.map((message, i) => {
@@ -88,9 +86,9 @@ export default function ChatRoom(params) {
                 <h1 className="flex justify-center items-center h-full">Doesn't have chat anything, let's chat with {userChat.name}</h1>
             }
         </div>
-        <form onSubmit={handleSubmit(sendChat)} method="post">
-            <div className="relative border-l-2">
-                <input type="text" {...register("message", { required: "Please enter your chat." })} className="bottom-0 py-5 px-2 w-full border-t-gray-300 border-t-2 outline-0 focus:border-t-2 focus:border-l-2 focus:border-gray-800 focus:h-full relative" placeholder="Write message..."/>
+        <form onSubmit={handleSubmit(sendChat)} method="post" className="h-[8%]">
+            <div className="relative border-l-2 h-full">
+                <input type="text" {...register("message", { required: "Please enter your chat." })} className="bottom-0 py-5 px-2 w-full h-full border-t-gray-300 border-t-2 outline-0 focus:border-t-2 focus:border-l-2 focus:border-gray-800 focus:h-full relative" placeholder="Write message..."/>
                 <button className="absolute right-5 top-5" type="submit">
                     <box-icon type='solid' size='md' name='send'></box-icon>
                 </button>

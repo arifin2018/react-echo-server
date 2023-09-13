@@ -54,9 +54,9 @@ function RightScreen(params) {
     const [userChat, setUserChat] = useRecoilState(UserChatRecoil);
     return (
         <>
-            <div>
-                <div className="flex justify-between relative border-b-4">
-                    <h1 className="p-3 min-h-[7%] font-medium">{userChat.name}</h1>
+            <div className="h-[5%]">
+                <div className="py-1 px-3 flex h-full justify-between relative border-b-4">
+                    <h1 className="min-h-[7%] font-medium">{userChat.name}</h1>
                     <button className="block md:hidden relative" type="button" onClick={e => setButtonNavbar(!buttonNavbar)}>
                         {
                             buttonNavbar ? 
