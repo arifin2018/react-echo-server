@@ -10,9 +10,14 @@ const UserChatRecoil = atom({
     default:[]
 })
 
+const modalUploadRecoil = atom({
+    key: 'modalUploadRecoil',
+    default:false
+})
+
 const UserDataExist = atom({
     key: 'UserDataExist',
     default: [],
 })
 
-export {MessagesRecoil, UserChatRecoil, UserDataExist};
+export {MessagesRecoil, UserChatRecoil, UserDataExist,modalUploadRecoil};
