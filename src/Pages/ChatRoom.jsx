@@ -42,7 +42,7 @@ export default function ChatRoom(params) {
             const storage = getStorage();
             let name = file.name.replace(/\s+/g, '');
             const storageRef = ref(storage, `/Chat/${generateRandomString(4)}^${name}`);
-            
+            UpdateModalUpload()
             await uploadString(storageRef, fileContent, 'data_url').then((snapshot) => {
                 resultURLImage = snapshot.metadata.fullPath;
             });
