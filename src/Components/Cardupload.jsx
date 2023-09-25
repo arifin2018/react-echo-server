@@ -10,13 +10,9 @@ function CardUpload(params) {
             setType('text')
         }
     }
-    const {handleFileUpload,fileContent,setFileContent,sendChat,useForm,setType} = params
+    const {register,handleFileUpload,fileContent,setFileContent,sendChat,useForm,setType} = params
 
-    const {register,handleSubmit, setValue} = useForm({
-        defaultValues: {
-            message: fileContent, 
-        },
-    })
+    const {handleSubmit, setValue,reset} = useForm({})
 
     useEffect(()=>{
         setValue('message',fileContent)

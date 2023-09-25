@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import API from "../Api";
@@ -7,7 +7,10 @@ import { useRecoilState } from "recoil";
 import { MessagesRecoil, UserChatRecoil, modalUploadRecoil } from "../Helpers/Recoil";
 import CardUpload from "../Components/Cardupload";
 import React  from 'react';
-
+import { Buffer } from "buffer";
+import { getStorage, ref, uploadBytes, uploadString } from "firebase/storage";
+import { generateRandomString } from "../Constant/string";
+import { getImageStorage } from "../Constant/firebase";
 
 export default function ChatRoom(params) {
     const [messages, setMessages] = useRecoilState(MessagesRecoil);
@@ -18,7 +21,8 @@ export default function ChatRoom(params) {
     const [modalUpload ,setModalUpload] = useRecoilState(modalUploadRecoil)
     const [fileContent, setFileContent] = useState('');
     const [file, setFile] = useState('');
-    const [type, setType] = useState('');
+    const [type, setType] = useState('text');
+
     function handleFileUpload(e){
         const file = e.target.files[0];
         setFile(e.target.files[0])
@@ -31,22 +35,27 @@ export default function ChatRoom(params) {
             reader.readAsDataURL(file);
         }
     }
-    function dataURLtoFile(dataurl, filename) {
-        var arr = dataurl.split(','),
-            mime = arr[0].match(/:(.*?);/)[1],
-            bstr = atob(arr[arr.length - 1]), 
-            n = bstr.length, 
-            u8arr = new Uint8Array(n);
-        while(n--){
-            u8arr[n] = bstr.charCodeAt(n);
-        }
-        return new File([u8arr], filename, {type:mime});
-    }
 
     async function sendChat(data) {
         if (type === "image") {
-            data = new FormData();
-            data.append("image", dataURLtoFile(fileContent,'File'));
+            let resultURLImage = '';
+            const storage = getStorage();
+            let name = file.name.replace(/\s+/g, '');
+            const storageRef = ref(storage, `/Chat/${generateRandomString(4)}^${name}`);
+            
+            await uploadString(storageRef, fileContent, 'data_url').then((snapshot) => {
+                resultURLImage = snapshot.metadata.fullPath;
+            });
+            data = {
+                message:resultURLImage,
+                type: type
+            }
+            setType('image')
+            UpdateModalUpload()
+        }
+        data = {
+            ...data,
+            type: type
         }
         await API({
             path: `/chat/${id}`,
@@ -63,6 +72,13 @@ export default function ChatRoom(params) {
             }
         })
         reset()
+        if (type === "image") {
+            data = {
+                ...data,
+                message: fileContent
+            }
+        }
+        
         let datas = {
             'sender_id':JSON.parse(getCookie('user')).id,
             'receiver_id':id,
@@ -70,6 +86,9 @@ export default function ChatRoom(params) {
             'type':type
         }
         setMessages((old) => [...old,datas]);
+        setFileContent('')
+        setFile('')
+        setType('text')
     }
 
     async function getChat(data) {
@@ -83,7 +102,41 @@ export default function ChatRoom(params) {
                 window.location.reload()
             }
         })
-        setMessages(response.message);
+        const onlyImage = response.message.filter(item => item.type === 'image');
+        const result = await Promise.allSettled(onlyImage.map(item => getImageStorage(item.message)))
+        // const result = await Promise.all(onlyImage.map(item =>getImageStorage(item.message)))
+        let count = 0;
+
+        const imageMessage = result.map(item => item.value)
+        const newMessage = response.message.map(item => {
+            if (item.type === 'image') {
+                const result = {
+                    ...item,
+                    message: imageMessage[count]
+                }
+                count++
+                return result
+            }
+            return item
+        })
+
+        // let newArrMessages = response.message
+
+        // newArrMessages.map((data,i)=>{
+        //     let numberArr = 0;
+        //     if (data.type == 'image') {
+        //         newArrMessages[i]= {
+        //             ...newArrMessages[i],
+        //             message: result.map(item => item.value)[numberArr++]
+        //         }
+        //         console.log(newArrMessages[i],i);
+        //     }
+        // })
+        // response.message.forEach(element => {
+            
+        // });
+
+        setMessages(newMessage);
         setUserChat(response.user);
     }
 
@@ -103,9 +156,26 @@ export default function ChatRoom(params) {
         })
     }
 
+    function ImageUrl(params) {
+        // setImages()
+        // console.log(images);
+    }
+
     useEffect(()=>{
         scrollToBottom()
     },[messages])
+    
+    // useEffect(()=>{
+    //     updateFieldChanged()
+    // },[])
+    // async function updateFieldChanged(params) {
+    //     await getImageStorage(params)
+    //                 .then((response) =>{
+    //                     return response
+    //                 })
+    // }   
+
+    
     return <>
         <div className="px-3 py-3 h-[86%] overflow-y-auto space-y-4" ref={messageEnd}>
             {
@@ -114,19 +184,27 @@ export default function ChatRoom(params) {
             }
             {
                 messages.length > 0 ?
-                    messages?.map((message, i) => {
-                        return message?.sender_id === JSON.parse(getCookie('user')).id ?
-                            <span className="flex justify-end" key={i}>
+                messages?.map((message, i) => {
+                    return message?.sender_id === JSON.parse(getCookie('user')).id ?
+                        <span className="flex justify-end" key={i}>
                                 <p className=" bg-slate-400 px-2 py-1 rounded max-w-[90%]">
-                                    {message?.message}
+                                    {
+                                        message.type === 'text' ? 
+                                        message?.message :
+                                        <img className="max-h-60" src={message?.message} alt={message?.message} />
+                                    }
                                 </p>
-                            </span>
+                        </span>
                         :
-                            <span className="flex justify-start" key={i}>
-                                <p className=" bg-gray-200 px-2 py-1 rounded max-w-[90%]">
-                                    {message?.message}
-                                </p>
-                            </span>
+                        <span className="flex justify-start" key={i}>
+                            <p className=" bg-gray-200 px-2 py-1 rounded max-w-[90%]">
+                                {
+                                    message.type === 'text' ? message?.message : 
+                                    <img className="max-h-60" src={message?.message} alt={message?.message} />
+                                    // <img src={updateFieldChanged(message?.message)} alt={updateFieldChanged(message?.message)} />
+                                }
+                            </p>
+                        </span>
                     }) 
                 :
                 <h1 className="flex justify-center items-center h-full">Doesn't have chat anything, let's chat with {userChat.name}</h1>
