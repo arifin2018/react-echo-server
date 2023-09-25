@@ -7,6 +7,7 @@ import Pusher from 'pusher-js';
 import { getCookie } from './Helpers/Cookie';
 import { MessagesRecoil, UserChatRecoil } from './Helpers/Recoil';
 import API_URL from './Constant/api-url';
+import { getImageStorage } from './Constant/firebase';
 
 function App() {
   const [messages, setMessages] = useRecoilState(MessagesRecoil);
@@ -27,8 +28,19 @@ function App() {
             },
         },
     }).subscribe(`private-messageChat-${userChat.id}`);
-    channel.bind('private.sendMessage', (data,error) => {
-        setMessages((old) => [...old,data.dataMessage]);
+    channel.bind('private.sendMessage', async (data,error) => {
+      if (data.dataMessage.type == 'image') {
+        console.log(data.dataMessage);
+        const resultMessage = await Promise.resolve(getImageStorage(data.dataMessage.message))
+        console.log(resultMessage);
+        data.dataMessage = {
+          ...data.dataMessage,
+          message: resultMessage
+        }
+      }
+      setMessages((old) => [
+        ...old,data.dataMessage
+      ]);
     });
 },[userChat])
 

@@ -104,7 +104,6 @@ export default function ChatRoom(params) {
         })
         const onlyImage = response.message.filter(item => item.type === 'image');
         const result = await Promise.allSettled(onlyImage.map(item => getImageStorage(item.message)))
-        // const result = await Promise.all(onlyImage.map(item =>getImageStorage(item.message)))
         let count = 0;
 
         const imageMessage = result.map(item => item.value)
@@ -119,22 +118,6 @@ export default function ChatRoom(params) {
             }
             return item
         })
-
-        // let newArrMessages = response.message
-
-        // newArrMessages.map((data,i)=>{
-        //     let numberArr = 0;
-        //     if (data.type == 'image') {
-        //         newArrMessages[i]= {
-        //             ...newArrMessages[i],
-        //             message: result.map(item => item.value)[numberArr++]
-        //         }
-        //         console.log(newArrMessages[i],i);
-        //     }
-        // })
-        // response.message.forEach(element => {
-            
-        // });
 
         setMessages(newMessage);
         setUserChat(response.user);
@@ -156,25 +139,9 @@ export default function ChatRoom(params) {
         })
     }
 
-    function ImageUrl(params) {
-        // setImages()
-        // console.log(images);
-    }
-
     useEffect(()=>{
         scrollToBottom()
     },[messages])
-    
-    // useEffect(()=>{
-    //     updateFieldChanged()
-    // },[])
-    // async function updateFieldChanged(params) {
-    //     await getImageStorage(params)
-    //                 .then((response) =>{
-    //                     return response
-    //                 })
-    // }   
-
     
     return <>
         <div className="px-3 py-3 h-[86%] overflow-y-auto space-y-4" ref={messageEnd}>
@@ -201,7 +168,6 @@ export default function ChatRoom(params) {
                                 {
                                     message.type === 'text' ? message?.message : 
                                     <img className="max-h-60" src={message?.message} alt={message?.message} />
-                                    // <img src={updateFieldChanged(message?.message)} alt={updateFieldChanged(message?.message)} />
                                 }
                             </p>
                         </span>
