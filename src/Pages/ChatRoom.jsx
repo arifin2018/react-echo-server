@@ -51,7 +51,7 @@ export default function ChatRoom(params) {
                 type: type
             }
             setType('image')
-            UpdateModalUpload()
+            // UpdateModalUpload()
         }
         data = {
             ...data,
