@@ -32,15 +32,18 @@ function App() {
       if (data.dataMessage.type == 'image') {
         console.log(data.dataMessage);
         const resultMessage = await Promise.resolve(getImageStorage(data.dataMessage.message))
-        console.log(resultMessage);
         data.dataMessage = {
           ...data.dataMessage,
           message: resultMessage
         }
+        setMessages((old) => [
+          ...old,data.dataMessage
+        ]);
+      }else{
+        setMessages((old) => [
+          ...old,data.dataMessage
+        ]);
       }
-      setMessages((old) => [
-        ...old,data.dataMessage
-      ]);
     });
 },[userChat])
 
