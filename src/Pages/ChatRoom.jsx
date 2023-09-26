@@ -132,10 +132,10 @@ export default function ChatRoom(params) {
     },[id])
 
     function scrollToBottom() {
-        return messageEnd.current?.scrollTo({
+        return setTimeout(messageEnd.current?.scrollTo({
             behavior: "smooth",
             top: document.body.scrollHeight * 9999,
-        }) 
+        }),1500)
         
     }
 
