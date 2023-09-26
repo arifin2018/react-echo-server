@@ -15,9 +15,14 @@ const modalUploadRecoil = atom({
     default:false
 })
 
+const errorCardUpload = atom({
+    key: 'errorCardUpload',
+    default:''
+})
+
 const UserDataExist = atom({
     key: 'UserDataExist',
     default: [],
 })
 
-export {MessagesRecoil, UserChatRecoil, UserDataExist,modalUploadRecoil};
+export {MessagesRecoil, UserChatRecoil, UserDataExist,modalUploadRecoil,errorCardUpload};

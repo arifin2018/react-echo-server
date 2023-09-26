@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import API from "../Api";
 import { DeleteAll, getCookie } from "../Helpers/Cookie";
 import { useRecoilState } from "recoil";
-import { MessagesRecoil, UserChatRecoil, modalUploadRecoil } from "../Helpers/Recoil";
+import { MessagesRecoil, UserChatRecoil, errorCardUpload, modalUploadRecoil } from "../Helpers/Recoil";
 import CardUpload from "../Components/Cardupload";
 import React  from 'react';
 import { Buffer } from "buffer";
@@ -21,6 +21,7 @@ export default function ChatRoom(params) {
     const [modalUpload ,setModalUpload] = useRecoilState(modalUploadRecoil)
     const [fileContent, setFileContent] = useState('');
     const [file, setFile] = useState('');
+    const [error, setError] = useRecoilState(errorCardUpload);
     const [type, setType] = useState('text');
 
     function handleFileUpload(e){
@@ -37,7 +38,12 @@ export default function ChatRoom(params) {
     }
 
     async function sendChat(data) {
+        setError('')
         if (type === "image") {
+            if (!file.name.match(/\.(jpg|jpeg|png|gif)$/)) {
+                setError('please select image valid. jpg|jpeg|png|gif')
+                return false
+            }
             let resultURLImage = '';
             const storage = getStorage();
             UpdateModalUpload()

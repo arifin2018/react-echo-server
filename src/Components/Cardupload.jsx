@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { modalUploadRecoil } from "../Helpers/Recoil";
+import { errorCardUpload, modalUploadRecoil } from "../Helpers/Recoil";
 
 function CardUpload(params) {
     const [modalUpload ,setModalUpload] = useRecoilState(modalUploadRecoil)
+    const [error, setError] = useRecoilState(errorCardUpload);
     function UpdateModalUpload() {
         setModalUpload(!modalUpload)
         if (modalUpload) {
@@ -25,6 +26,7 @@ function CardUpload(params) {
             <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
                 <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
                     <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg p-2">
+                        <span>{error}</span>
                         <div className=" border-dashed border-2 border-sky-500 bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                             <div className="sm:flex sm:items-start">
                                 {
@@ -32,8 +34,8 @@ function CardUpload(params) {
                                     <>
                                         <div className="relative bg-red-800">
                                             <img src={fileContent} alt="" className="relative max-h-80" />
-                                            <div className="absolute -right-3 -top-3 cursor-pointer" onClick={()=>setFileContent('')}>
-                                                <box-icon type='solid' name='message-rounded-x'></box-icon>
+                                            <div className="absolute -right-6 -top-6 cursor-pointer" onClick={()=>setFileContent('')}>
+                                                <box-icon type='solid' size='md' name='message-rounded-x'></box-icon>
                                             </div>
                                         </div>
                                     </>
