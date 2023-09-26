@@ -40,9 +40,9 @@ export default function ChatRoom(params) {
         if (type === "image") {
             let resultURLImage = '';
             const storage = getStorage();
+            UpdateModalUpload()
             let name = file.name.replace(/\s+/g, '');
             const storageRef = ref(storage, `/Chat/${generateRandomString(4)}^${name}`);
-            UpdateModalUpload()
             await uploadString(storageRef, fileContent, 'data_url').then((snapshot) => {
                 resultURLImage = snapshot.metadata.fullPath;
             });
@@ -51,7 +51,6 @@ export default function ChatRoom(params) {
                 type: type
             }
             setType('image')
-            // UpdateModalUpload()
         }
         data = {
             ...data,
@@ -136,7 +135,8 @@ export default function ChatRoom(params) {
         return messageEnd.current?.scrollTo({
             behavior: "smooth",
             top: document.body.scrollHeight * 9999,
-        })
+        }) 
+        
     }
 
     useEffect(()=>{
@@ -158,7 +158,7 @@ export default function ChatRoom(params) {
                                     {
                                         message.type === 'text' ? 
                                         message?.message :
-                                        <img className="max-h-60" src={message?.message} alt={message?.message} />
+                                        <img className="max-h-60" src={message?.message} onLoad={scrollToBottom} alt={message?.message} />
                                     }
                                 </p>
                         </span>
@@ -167,7 +167,7 @@ export default function ChatRoom(params) {
                             <p className=" bg-gray-200 px-2 py-1 rounded max-w-[90%]">
                                 {
                                     message.type === 'text' ? message?.message : 
-                                    <img className="max-h-60" src={message?.message} alt={message?.message} />
+                                    <img className="max-h-60" src={message?.message} onLoad={scrollToBottom} alt={message?.message} />
                                 }
                             </p>
                         </span>
