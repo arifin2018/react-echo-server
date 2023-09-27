@@ -23,7 +23,7 @@ function Chat() {
             setUsers(data.user)
         })
         .catch(function (e) {
-            if (e.response?.status !== 200) {
+            if (e.response?.status >= 500) {
                 DeleteAll()
                 window.location.reload()
             }
