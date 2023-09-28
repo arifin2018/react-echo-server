@@ -34,7 +34,8 @@ function App() {
         const resultMessage = await Promise.resolve(getImageStorage(data.dataMessage.message))
         data.dataMessage = {
           ...data.dataMessage,
-          message: resultMessage
+          message: resultMessage,
+          created_at:new Date().toISOString(),
         }
         setMessages((old) => [
           ...old,data.dataMessage
