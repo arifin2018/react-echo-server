@@ -3,12 +3,14 @@ import Card from '../../Components/card'
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import API from '../../Api';
+import { useNavigate } from 'react-router-dom';
 
 
 function RegisterForm() {
     const passwordInput = useRef(false)
     const [password, setPassword] = useState(true);
     const register = useForm();
+    let history = useNavigate();
 
     function showHide(e) {
         if (password) {
@@ -32,8 +34,10 @@ function RegisterForm() {
                 params,
             })
             alert('register success')
+            history('/')
         } catch (error) {
-            alert(error.response.data.message)
+            console.log(error);
+            alert(error?.response?.data?.message)
             // alert('register failed')
         }
     }
