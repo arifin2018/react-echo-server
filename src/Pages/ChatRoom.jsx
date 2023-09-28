@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, Suspense } from "react";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import API from "../Api";
 import { DeleteAll, getCookie } from "../Helpers/Cookie";
 import { useRecoilState } from "recoil";
@@ -88,6 +88,7 @@ export default function ChatRoom(params) {
             'sender_id':JSON.parse(getCookie('user')).id,
             'receiver_id':id,
             'message':data.message,
+            'created_at':new Date().toISOString(),
             'type':type
         }
         setMessages((old) => [...old,datas]);
@@ -159,27 +160,38 @@ export default function ChatRoom(params) {
                 messages.length > 0 ?
                 messages?.map((message, i) => {
                     return message?.sender_id === JSON.parse(getCookie('user')).id ?
-                        <span className="flex justify-end" key={i}>
+                    <div key={i}>
+                        <span className="flex justify-end">
                                 <p className=" bg-slate-400 px-2 py-1 rounded max-w-[90%]">
                                     {
                                         message.type === 'text' ? 
                                         message?.message :
-                                        <img className="max-h-60" src={message?.message} onLoad={scrollToBottom} alt={message?.message} />
+                                        <Link to={message?.message} target={"_blank"}>
+                                            <img className="max-h-60"src={message?.message} onLoad={scrollToBottom} alt={message?.message} />
+                                        </Link>
                                     }
                                 </p>
+                                
                         </span>
+                        <p className="flex justify-end text-xs text-neutral-300">{new Date(message?.created_at).toLocaleTimeString(undefined, {timeZone:'Asia/Jakarta', hour: "numeric", minute: "numeric"})}</p>
+                    </div>
                         :
-                        <span className="flex justify-start" key={i}>
+                    <div key={i}>
+                        <span className="flex justify-start">
                             <p className=" bg-gray-200 px-2 py-1 rounded max-w-[90%]">
                                 {
                                     message.type === 'text' ? message?.message : 
-                                    <img className="max-h-60" src={message?.message} onLoad={scrollToBottom} alt={message?.message} />
+                                    <Link to={message?.message} target={"_blank"}>
+                                        <img className="max-h-60"src={message?.message} onLoad={scrollToBottom} alt={message?.message} />
+                                    </Link>
                                 }
                             </p>
                         </span>
+                        <p className="flex justify-start text-xs text-neutral-400">{new Date(message?.created_at).toLocaleTimeString(undefined, {timeZone:'Asia/Jakarta', hour: "numeric", minute: "numeric"})}</p>
+                    </div>
                     }) 
-                :
-                <h1 className="flex justify-center items-center h-full">Doesn't have chat anything, let's chat with {userChat.name}</h1>
+                    :
+                    <h1 className="flex justify-center items-center h-full">Doesn't have chat anything, let's chat with {userChat.name}</h1>
             }
         </div>
         <form onSubmit={handleSubmit(sendChat)} method="post" className="h-[8%]">
