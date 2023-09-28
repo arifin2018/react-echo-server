@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import Card from '../../Components/card'
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import API from '../../Api';
 
 
 function RegisterForm() {
@@ -23,19 +24,17 @@ function RegisterForm() {
         return register.setValue("password", e.target.value)
     }
 
-    function axiosPost(params) {
+    async function axiosPost(params) {
         try {
-            axios.post('api/register',{
-                name:params.name,
-                email:params.email,
-                password:params.password,
-            }).then(
-                response=>{
-                    console.log(response);
-                }
-            )
+            await API({
+                path: '/register',
+                method: 'POST',
+                params,
+            })
+            alert('register success')
         } catch (error) {
-            console.log(error);
+            alert(error.response.data.message)
+            // alert('register failed')
         }
     }
 
