@@ -18,7 +18,7 @@ function App() {
     window.io = require('socket.io-client');
     window.Echo = new Echo({
       broadcaster: 'socket.io',
-      host: 'http://54.254.178.234:6011',
+      host: 'https://backend.arifinportfolio.my.id',
       authEndpoint:`${API_URL}/broadcasting/auth`,
       key: "682cb8acab2f22e12728f0f349648bc6",
       withCredentials: true,
